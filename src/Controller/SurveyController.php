@@ -16,7 +16,7 @@ class SurveyController extends AbstractController
 {
 
     /**
-     * @Route("/admin/survey")
+     * @Route("/admin/survey", name="survey_index")
      */
     public function show()
     {
