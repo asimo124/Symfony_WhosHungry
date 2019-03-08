@@ -9,9 +9,17 @@
 namespace App\Controller;
 
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class SurveyController extends AbstractController
 {
-    
+
+    /**
+     * @Route("/admin/survey")
+     */
+    public function show()
+    {
+        return $this->render("survey/index.html.twig");
+    }
 }
