@@ -9,8 +9,11 @@
 namespace App\Controller;
 
 
+use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use App\User;
 
 class SurveyController extends AbstractController
 {
@@ -18,8 +21,16 @@ class SurveyController extends AbstractController
     /**
      * @Route("/admin/survey", name="survey_index")
      */
-    public function show()
+    public function show(UserPasswordEncoderInterface $passwordEncoder)
     {
+        /*/
+        $User = $this->getDoctrine()->getRepository(\App\Entity\User::class)->findOneBy([
+            "username" => "ahawley"
+        ]);
+        $newPass = $passwordEncoder->encodePassword($User, "fish90");
+        dd($newPass);
+        //*/
+
         return $this->render("survey/index.html.twig");
     }
 }
