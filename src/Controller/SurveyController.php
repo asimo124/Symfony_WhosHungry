@@ -9,10 +9,15 @@
 namespace App\Controller;
 
 
+use App\Entity\Restaurant;
+use App\Entity\RestaurantUserRating;
 use Doctrine\Common\Persistence\ObjectManager;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use App\User;
@@ -56,5 +61,46 @@ class SurveyController extends AbstractController
         $RestaurantRatings = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         return new JsonResponse($RestaurantRatings);
+    }
+
+    /**
+     * @Route("/admin/rating/update/{id}")
+     * @Method({"POST"})
+     */
+    public function updateRating(Restaurant $restaurant, Request $request, TokenStorageInterface $tokenStorage)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        if (!$restaurant) {
+            return new JsonResponse([
+                "status" => "error",
+                "error_msg" => "Restaurant does not exist"
+            ]);
+        }
+
+        $User = $tokenStorage->getToken()->getUser();
+
+        $rating = $request->request->has("rating") ? intval($request->request->get("rating")) : 0;
+
+        $RestaurantUserRating = $em->getRepository(RestaurantUserRating::class)->findOneBy([
+            "user" => $User->getId(),
+            "restaurant" => $restaurant->getId()
+        ]);
+
+        if ($RestaurantUserRating) {
+            $RestaurantUserRating->setRating($rating);
+        } else {
+
+            $RestaurantUserRating = new RestaurantUserRating();
+            $RestaurantUserRating->setUser($User);
+            $RestaurantUserRating->setRestaurant($restaurant);
+            $RestaurantUserRating->setRating($rating);
+        }
+        $em->persist($RestaurantUserRating);
+        $em->flush();
+
+        return new JsonResponse([
+            "status" => "success"
+        ]);
     }
 }
