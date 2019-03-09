@@ -103,4 +103,47 @@ class SurveyController extends AbstractController
             "status" => "success"
         ]);
     }
+
+    /**
+     * @Route("/admin/survey/add_ratings")
+     */
+    public function addUserRatings()
+    {
+        dd("don't run");
+
+        $em = $this->getDoctrine()->getManager();
+
+        $sql = "SELECT * FROM user";
+        $stmt_sel_users = $em->getConnection()->prepare($sql);
+
+        $sql = "INSERT INTO restaurant_user_rating 
+                ( restaurant_id,  user_id,  rating) VALUES 
+                (:restaurant_id, :user_id, :rating) ";
+        $stmt_ins_user_ratings = $em->getConnection()->prepare($sql);
+
+        $sql = "SELECT * FROM restaurant ";
+        $stmt = $em->getConnection()->prepare($sql);
+        $stmt->execute();
+        $Restaurants = $stmt->fetchAll(2);
+        foreach ($Restaurants as $getRestaurant) {
+
+            $sql = "SELECT * FROM user";
+            $stmt_sel_users->execute();
+            $Users = $stmt_sel_users->fetchAll(2);
+            foreach ($Users as $getUser) {
+
+                $rating = rand(1,10);
+
+                $sql = "INSERT INTO restaurant_user_rating 
+                ( restaurant_id,  user_id,  rating) VALUES 
+                (:restaurant_id, :user_id, :rating) ";
+                $stmt_ins_user_ratings->execute([
+                   "restaurant_id" => $getRestaurant['id'],
+                   "user_id" => $getUser['id'],
+                   "rating" => $rating
+                ]);
+            }
+        }
+        dd("Script Completed");
+    }
 }
