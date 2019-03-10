@@ -38,6 +38,11 @@ class Restaurant
      */
     private $restaurantUserRatings;
 
+    /**
+     * @ORM\Column(type="date", name="last_visited_date", nullable=true)
+     */
+    private $lastVisitedDate = null;
+
 
     public function __construct()
     {
@@ -115,4 +120,22 @@ class Restaurant
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getLastVisitedDate()
+    {
+        return $this->lastVisitedDate;
+    }
+
+    /**
+     * @param mixed $lastVisitedDate
+     */
+    public function setLastVisitedDate($lastVisitedDate): void
+    {
+        $this->lastVisitedDate = $lastVisitedDate;
+    }
+
+
 }

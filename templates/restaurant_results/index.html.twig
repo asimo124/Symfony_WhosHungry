@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+{% block title %}Top Restaurant Picks{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style type="text/css">
+
+        .user_list_holder {
+            display: inline-block;
+            width: 31%;
+            margin-right: 1%;
+            height: 17px;
+        }
+
+    </style>
+{% endblock %}
+{% block body %}
+    <div class="container">
+
+        <div class="py-5 text-center">
+            <h2>Top Restaurant Picks</h2>
+            <p class="lead">Select which of your team is going out to lunch today, in order to get the current top restaurant picks!</p>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 order-md-1"></div>
+            <div class="col-md-6 order-md-2">
+                <h4 class="mb-3">Team Members Eating Lunch Today</h4>
+                <form action="{{ path("generate_restaurant_list") }}" method="post">
+                    <div class="row">
+                        <div class="col-md-12 mb-12">
+                            {% for User in Users %}
+                                <div class="user_list_holder" >
+                                    <input type="checkbox" class="" name="user_id[]" id="user_id" value="{{ User.id }}" />&nbsp;{{ User.firstName }} {{ User.lastName }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div style="clear: both; height: 12px;" ></div>
+                    <button class="btn btn-primary btn-lg btn-block" type="submit">Generate Top Picks</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

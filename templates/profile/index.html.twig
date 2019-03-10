@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+{% block title %}Login!{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/login.css') }}">
+{% endblock %}
+{% block body %}
+    <form class="form-signin" method="post" action="{{ path("update_password") }}">
+
+        <h1 class="h3 mb-3 font-weight-normal">Change Password</h1>
+        {% if saved %}
+            <div class="alert alert-success">You have updated your password!</div>
+        {% endif %}
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <button class="btn btn-lg btn-primary" type="submit">
+            Update
+        </button>&nbsp;<a class="btn btn-lg btn-default" href="{{ path("survey_index") }}">Back</a>
+    </form>
+{% endblock %}

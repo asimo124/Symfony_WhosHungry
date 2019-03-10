@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+{% block title %}Top Restaurant Picks{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+{% block body %}
+    <div class="container">
+
+        <div class="py-5 text-center">
+            <h2>Top Restaurant Picks</h2>
+            <p class="lead">Here are the Top Restaurant Choices for this week!</p>
+            <a href="{{ path("restaurant_list") }}" class="btn btn-primary">Re-generate</a>
+        </div>
+
+        <div class="list-group">
+            {% for Restaurant in RestaurantList %}
+            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex flex-row">
+                    <div class="d-flex p-2">
+                        <div style="font-size: 36px; margin-right: 15px;">
+                            <strong>{{ Restaurant.num }}</strong>
+                        </div>
+                    </div>
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 style="margin-top: 18px;" id="rest_date{{ Restaurant.id }}">{{ Restaurant.name }}</h5>
+                        <div style="clear: both; height: 22px;" ></div>
+                        <small>
+                            Last visited {{ Restaurant.daysPast }} days ago
+                        </small>
+                    </div>
+                </div>
+                <div class="d-flex flex-row">
+                    <div class="d-flex p-2" style="visibility: hidden; height: 2px; padding: 0px">
+                        <div style="font-size: 36px; margin-right: 15px;">1</div>
+                    </div>
+                    <p class="mb-1">Combined Rating: {{ Restaurant.combinedRating }}</p>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% if isAdmin %}
+    <script>
+
+        function updateRestaurantDate(restaurantId) {
+            var url = '{{ path("update_restaurant_date", { id: -1 }) }}';
+            url = url.replace("-1", restaurantId);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', url);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    console.log('Success');
+                }
+            };
+            xhr.send();
+        }
+        {% for Restaurant in RestaurantList %}
+            var restLink{{ Restaurant.id }} = document.getElementById('rest_date{{ Restaurant.id }}');
+            restLink{{ Restaurant.id }}.onclick = function(e){
+                updateRestaurantDate({{ Restaurant.id }});
+            }
+        {% endfor %}
+    </script>
+    {% endif %}
+{% endblock %}
