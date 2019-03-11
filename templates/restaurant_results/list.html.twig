@@ -9,34 +9,59 @@
         <div class="py-5 text-center">
             <h2>Top Restaurant Picks</h2>
             <p class="lead">Here are the Top Restaurant Choices for this week!</p>
-            <a href="{{ path("restaurant_list") }}" class="btn btn-primary">Re-generate</a>
+            <a href="{{ path("home") }}" class="btn btn-primary">Re-generate</a>
         </div>
 
         <div class="list-group">
-            {% for Restaurant in RestaurantList %}
-            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-                <div class="d-flex flex-row">
-                    <div class="d-flex p-2">
-                        <div style="font-size: 36px; margin-right: 15px;">
-                            <strong>{{ Restaurant.num }}</strong>
+            {% if RestaurantList|length > 0 %}
+                {% for Restaurant in RestaurantList %}
+                <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                    <div class="d-flex flex-row">
+                        <div class="d-flex p-2">
+                            <div style="font-size: 36px; margin-right: 15px;">
+                                <strong>{{ Restaurant.num }}</strong>
+                            </div>
+                        </div>
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 style="margin-top: 18px;" id="rest_date{{ Restaurant.id }}">{{ Restaurant.name }}</h5>
+                            <div style="clear: both; height: 22px;" ></div>
+                            <small>
+                                Last visited {{ Restaurant.daysPast }} days ago
+                            </small>
                         </div>
                     </div>
-                    <div class="d-flex w-100 justify-content-between">
-                        <h5 style="margin-top: 18px;" id="rest_date{{ Restaurant.id }}">{{ Restaurant.name }}</h5>
-                        <div style="clear: both; height: 22px;" ></div>
-                        <small>
-                            Last visited {{ Restaurant.daysPast }} days ago
-                        </small>
+                    <div class="d-flex flex-row">
+                        <div class="d-flex p-2" style="visibility: hidden; height: 2px; padding: 0px">
+                            <div style="font-size: 36px; margin-right: 15px;">1</div>
+                        </div>
+                        <p class="mb-1">Combined Rating: {{ Restaurant.combinedRating }}</p>
                     </div>
-                </div>
-                <div class="d-flex flex-row">
-                    <div class="d-flex p-2" style="visibility: hidden; height: 2px; padding: 0px">
-                        <div style="font-size: 36px; margin-right: 15px;">1</div>
+                </a>
+                {% endfor %}
+            {% else %}
+                <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                    <div class="d-flex flex-row">
+                        <div class="d-flex p-2">
+                            <div style="font-size: 36px; margin-right: 15px;">
+                                <strong></strong>
+                            </div>
+                        </div>
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 style="margin-top: 18px;" id="rest_date">No Data to Display</h5>
+                            <div style="clear: both; height: 22px;" ></div>
+                            <small>
+
+                            </small>
+                        </div>
                     </div>
-                    <p class="mb-1">Combined Rating: {{ Restaurant.combinedRating }}</p>
-                </div>
-            </a>
-            {% endfor %}
+                    <div class="d-flex flex-row">
+                        <div class="d-flex p-2" style="visibility: hidden; height: 2px; padding: 0px">
+                            <div style="font-size: 36px; margin-right: 15px;">1</div>
+                        </div>
+                        <p class="mb-1"></p>
+                    </div>
+                </a>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
