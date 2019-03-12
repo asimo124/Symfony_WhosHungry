@@ -53,7 +53,8 @@ class SurveyController extends AbstractController
         $sql = "SELECT r.id, r.name, ifnull(rur.rating, -1) as rating 
                 FROM restaurant r  
                 LEFT JOIN restaurant_user_rating rur 
-                  on r.id = rur.restaurant_id AND rur.user_id = :user_id ";
+                  on r.id = rur.restaurant_id AND rur.user_id = :user_id 
+                ORDER BY r.name ";
         $stmt = $em->getConnection()->prepare($sql);
         $stmt->execute([
             "user_id" => $User->getId()
