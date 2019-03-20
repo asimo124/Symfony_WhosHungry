@@ -54,6 +54,7 @@ class SurveyController extends AbstractController
                 FROM restaurant r  
                 LEFT JOIN restaurant_user_rating rur 
                   on r.id = rur.restaurant_id AND rur.user_id = :user_id 
+                WHERE rur.id IS null
                 ORDER BY r.name ";
         $stmt = $em->getConnection()->prepare($sql);
         $stmt->execute([
@@ -71,6 +72,13 @@ class SurveyController extends AbstractController
     public function updateRating(Restaurant $restaurant, Request $request, TokenStorageInterface $tokenStorage)
     {
         $em = $this->getDoctrine()->getManager();
+
+        /*/
+        return new JsonResponse([
+            "status" => "error",
+            "error_msg" => "No ratings for you!"
+        ]);
+        //*/
 
         if (!$restaurant) {
             return new JsonResponse([

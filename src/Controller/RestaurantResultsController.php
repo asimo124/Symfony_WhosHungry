@@ -38,6 +38,8 @@ class RestaurantResultsController extends AbstractController
 
         $is_mobile = $request->cookies->get("is_mobile");
 
+
+
         return $this->render("restaurant_results/index.html.twig", [
             "Users" => $Users,
             "is_mobile" => $is_mobile
